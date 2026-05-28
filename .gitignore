@@ -1,0 +1,9 @@
+.DS_Store
+.claude/temp/*
+.claude/.venv/
+.clarke/*.db
+.clarke/*.db-*
+*.pyc
+__pycache__/
+.claude/tests/reports/*
+.claude/projects/*

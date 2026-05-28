@@ -1,0 +1,81 @@
+{
+  "skills": {
+    "typer-topic": {
+      "name": "typer-topic",
+      "description": "Thought experiment topic selection — generating deep sci-fi topics based on scientific hypotheses and philosophical questions"
+    },
+    "typer-settings": {
+      "name": "typer-settings",
+      "description": "World-building + scientific framework + philosophical boundaries"
+    },
+    "typer-character": {
+      "name": "typer-character",
+      "description": "Character design — core profiles, cognitive frameworks, character arcs"
+    },
+    "typer-style": {
+      "name": "typer-style",
+      "description": "Writing style definition — narrative tone, language density, description strategy"
+    },
+    "typer-research": {
+      "name": "typer-research",
+      "description": "Scientific research & verification — checking literature, laws, data"
+    },
+    "typer-outline": {
+      "name": "typer-outline",
+      "description": "Volume outline + story units + chapter outlines"
+    },
+    "typer-writer": {
+      "name": "typer-writer",
+      "description": "Chapter writing — hard sci-fi, character-driven narrative, scientific accuracy"
+    },
+    "typer-review": {
+      "name": "typer-review",
+      "description": "Literary review — structure, language, pacing, characters"
+    },
+    "typer-science-review": {
+      "name": "typer-science-review",
+      "description": "Science review — physics/math/logic consistency"
+    },
+    "typer-editor": {
+      "name": "typer-editor",
+      "description": "Editing & polishing — addressing review feedback"
+    },
+    "typer-consistency": {
+      "name": "typer-consistency",
+      "description": "Global consistency scan — cross-chapter science, timeline, character contradictions"
+    },
+    "typer-index": {
+      "name": "typer-index",
+      "description": "sqlite-vec semantic index: chapter retrieval, character queries, consistency pre-scan"
+    },
+    "typer-export": {
+      "name": "typer-export",
+      "description": "Export to TXT/EPUB/PDF formats"
+    },
+    "typer-init": {
+      "name": "typer-init",
+      "description": "Project init/reset — clear content, rebuild directory structure"
+    },
+    "typer-reader-review": {
+      "name": "typer-reader-review",
+      "description": "Reader blind review — simulate first-time reader experience, assess fluency, comprehension, emotional impact, engagement"
+    },
+    "typer-structure": {
+      "name": "typer-structure",
+      "description": "Story architecture design — narrative structure, plot backbone, chapter planning"
+    },
+    "typer-wrap": {
+      "name": "typer-wrap",
+      "description": "Volume wrap-up — setting holographic scan, philosophical thread audit, character state closure"
+    },
+    "typer-joint-review": {
+      "name": "typer-joint-review",
+      "description": "Joint review — combined literary & science review for small units (≤3 chapters)"
+    },
+    "typer-dashboard": {
+      "name": "typer-dashboard",
+      "description": "Creative dashboard — writing stats, character graph, volume progress, science coverage, character activity"
+    }
+  },
+  "_note": "无 PostToolUse hook。typer-index 由 typer-writer SKILL.md 显式调用，避免错误章节号或非正文文件误触发。"
+}

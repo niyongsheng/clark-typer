@@ -1,0 +1,103 @@
+{
+  "project_name": "clark-typer",
+  "description": "Test configuration for clark-typer creative workflow validation",
+
+  "paths": {
+    "project_root": "..",
+    "state_file": "../current-state.md",
+    "snapshot_file": "../chapter-snapshot.md",
+    "settings_dir": "../skills"
+  },
+
+  "workflow_steps": [
+    "init", "topic", "settings", "character", "style",
+    "structure", "research", "outline", "write", "review",
+    "science-review", "joint-review", "editor", "reader-review",
+    "consistency", "export", "wrap"
+  ],
+
+  "valid_transitions": {
+    "init": ["topic"],
+    "topic": ["settings"],
+    "settings": ["character"],
+    "character": ["style"],
+    "style": ["structure", "research"],
+    "structure": ["research", "settings", "character"],
+    "research": ["outline"],
+    "outline": ["write", "settings", "character", "style"],
+    "write": ["review", "joint-review", "outline", "character"],
+    "review": ["science-review", "editor"],
+    "science-review": ["editor"],
+    "joint-review": ["editor"],
+    "editor": ["reader-review"],
+    "reader-review": ["consistency", "write"],
+    "consistency": ["export", "editor"],
+    "export": ["wrap"],
+    "wrap": []
+  },
+
+  "output_contracts": {
+    "typer-init": {
+      "post_conditions": {
+        "dirs_empty": ["0-角色档案", "1-思想实验", "2-世界观设定", "3-科学设定", "4-分卷大纲", "5-剧情单元", "6-分章大纲", "7-正文", "8-参考资料", "9-素材碎片"]
+      }
+    },
+    "typer-topic": {
+      "files_exist": ["1-思想实验/创作意图.md", "1-思想实验/选题.md"]
+    },
+    "typer-settings": {
+      "files_exist": ["2-世界观设定/世界观.md", "3-科学设定/科学设定.md"]
+    },
+    "typer-character": {
+      "files_exist": ["0-角色档案/核心人物.md", "0-角色档案/关系图谱.md"]
+    },
+    "typer-style": {
+      "files_exist": ["1-思想实验/写作风格.md"]
+    },
+    "typer-structure": {
+      "files_exist": ["1-思想实验/故事架构.md"]
+    },
+    "typer-research": {
+      "dirs_not_empty": ["8-参考资料"]
+    },
+    "typer-outline": {
+      "dirs_not_empty": ["4-分卷大纲", "5-剧情单元", "6-分章大纲"]
+    },
+    "typer-writer": {
+      "pattern": "7-正文/第*章.txt"
+    },
+    "typer-review": {
+      "dirs_not_empty": [".claude/temp"]
+    },
+    "typer-science-review": {
+      "dirs_not_empty": [".claude/temp"]
+    },
+    "typer-reader-review": {
+      "pattern": ".claude/temp/*读者审稿*"
+    },
+    "typer-consistency": {
+      "dirs_not_empty": [".claude/temp"]
+    },
+    "typer-export": {
+      "dirs_not_empty": ["打包发布"]
+    },
+    "typer-wrap": {
+      "files_exist": [".claude/temp/卷终-设定扫描.md", ".claude/temp/卷终-哲学审计.md", "0-角色档案/卷末角色状态.md"]
+    },
+    "typer-index": {
+      "files_exist": [".clarke/clark.db"]
+    }
+  },
+
+  "content_constraints": {
+    "max_single_sentence_paragraphs": 5,
+    "min_density_buffer_gap_chars": 200,
+    "max_consecutive_high_density": 2,
+    "min_external_markers_per_character": 4,
+    "science_labels": ["[已知科学]", "[合理外推]", "[核心假设]"],
+    "chapter_format": ".txt",
+    "config_format": ".md"
+  },
+
+  "test_report_dir": "reports"
+}
