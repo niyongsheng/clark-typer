@@ -17,7 +17,7 @@ init_test_run
 
 describe "短篇模式完整状态链"
 
-SHORT_CHAIN="init intent topic settings character style research outline write joint-review editor reader-review consistency export wrap"
+SHORT_CHAIN="init intent topic settings character style research outline write review editor reader-review consistency export wrap"
 
 previous=""
 current_count=0
@@ -40,7 +40,7 @@ done
 
 describe "长篇模式完整状态链"
 
-LONG_CHAIN="init intent topic settings character style structure research outline write review science-review editor reader-review consistency export wrap"
+LONG_CHAIN="init intent topic settings character style structure research outline write review editor reader-review consistency export wrap"
 
 previous=""
 for step in $LONG_CHAIN; do
@@ -84,8 +84,7 @@ test_path() {
 }
 
 test_path "init→intent→topic" init intent topic
-test_path "write→review→science-review→editor" write review science-review editor
-test_path "write→joint-review→editor" write joint-review editor
+test_path "write→review→editor" write review editor
 test_path "consistency→export→wrap" consistency export wrap
 test_path "consistency→editor→reader-review" consistency editor reader-review
 
@@ -93,7 +92,7 @@ test_path "consistency→editor→reader-review" consistency editor reader-revie
 
 describe "非 wrap 状态都有出口"
 
-for step in init intent topic settings character style structure research outline write review science-review joint-review editor reader-review consistency export; do
+for step in init intent topic settings character style structure research outline write review editor reader-review consistency export; do
   TRANSITIONS=$(get_valid_transitions "$step")
   if [[ -z "$TRANSITIONS" ]]; then
     echo "    $FAIL Dead end at: $step (only wrap should have no outgoing)"

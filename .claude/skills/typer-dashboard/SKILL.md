@@ -146,4 +146,4 @@ graph TB
 - 完整看板直接打印到对话
 - Mermaid.js 关系图在 Claude Code 中原生渲染
 - 若项目为空（无正文、无角色），输出精简版看板，只显示工作流状态和初始化建议
-- 若 `.clarke/clark.db` 可用，通过 `typer-index.py stats` 获取机器层数据辅助看板
+- 若 `.clark/clark.db` 可用，通过 `typer-index.py stats` 获取机器层数据辅助看板

@@ -1,12 +1,12 @@
 ---
 name: "typer-science-review"
-description: "Science review — physics/math/logic consistency check and three-tier annotation compliance"
-workflow:
-  input: ["review"]
-  output: ["editor"]
+description: "[已合并到 typer-review] Science review — physics/math/logic consistency and three-tier annotation compliance"
 ---
 
-# Typer Science Review — 科学审稿
+> ⚠️ **本技能已合并到 `typer-review`**。审稿阶段不再分步进行，科学审稿作为 `typer-review` 报告中的一个维度执行。
+> 本文档保留作为科学审稿检查项的参考清单。
+
+# Typer Science Review — 科学审稿（参考）
 
 ## Role
 

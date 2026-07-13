@@ -39,7 +39,7 @@ echo ""
 
 # Create test directories
 TEST_PROJ=$(mktemp -d)
-TEST_CLARKE="$TEST_PROJ/.clarke"
+TEST_CLARKE="$TEST_PROJ/.clark"
 TEST_CHAPTERS="$TEST_PROJ/7-正文"
 TEST_CHARS="$TEST_PROJ/0-角色档案"
 mkdir -p "$TEST_CLARKE"
@@ -57,10 +57,10 @@ cat > "$TEST_CHARS/核心人物.md" << 'CHARDATA'
 CHARDATA
 
 # Export env vars for typer-index.py
-export CLARKE_DB_DIR="$TEST_CLARKE"
-export CLARKE_DB_PATH="$TEST_CLARKE/clark.db"
-export CLARKE_CHAPTERS_DIR="$TEST_CHAPTERS"
-export CLARKE_CHARACTER_FILE="$TEST_CHARS/核心人物.md"
+export CLARK_DB_DIR="$TEST_CLARKE"
+export CLARK_DB_PATH="$TEST_CLARKE/clark.db"
+export CLARK_CHAPTERS_DIR="$TEST_CHAPTERS"
+export CLARK_CHARACTER_FILE="$TEST_CHARS/核心人物.md"
 
 # ── Test: init ──────────────────────────────────────────────────
 
@@ -168,15 +168,15 @@ rm -rf "$TEST_PROJ"
 describe "空数据库上的优雅降级"
 
 EMPTY_DIR=$(mktemp -d)
-EMPTY_CLARKE="$EMPTY_DIR/.clarke"
+EMPTY_CLARKE="$EMPTY_DIR/.clark"
 EMPTY_CHAPTERS="$EMPTY_DIR/7-正文"
 mkdir -p "$EMPTY_CLARKE"
 mkdir -p "$EMPTY_CHAPTERS"
 
-export CLARKE_DB_DIR="$EMPTY_CLARKE"
-export CLARKE_DB_PATH="$EMPTY_CLARKE/clark.db"
-export CLARKE_CHAPTERS_DIR="$EMPTY_CHAPTERS"
-export CLARKE_CHARACTER_FILE="$EMPTY_DIR/核心人物.md"
+export CLARK_DB_DIR="$EMPTY_CLARKE"
+export CLARK_DB_PATH="$EMPTY_CLARKE/clark.db"
+export CLARK_CHAPTERS_DIR="$EMPTY_CHAPTERS"
+export CLARK_CHARACTER_FILE="$EMPTY_DIR/核心人物.md"
 
 "$PYTHON_BIN" "$INDEX_SCRIPT" init > /dev/null 2>&1
 
@@ -191,7 +191,7 @@ else
 fi
 
 rm -rf "$EMPTY_DIR"
-unset CLARKE_DB_DIR CLARKE_DB_PATH CLARKE_CHAPTERS_DIR CLARKE_CHARACTER_FILE
+unset CLARK_DB_DIR CLARK_DB_PATH CLARK_CHAPTERS_DIR CLARK_CHARACTER_FILE
 
 # ── Summary ──────────────────────────────────────────────────────
 

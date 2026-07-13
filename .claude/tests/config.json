@@ -12,7 +12,7 @@
   "workflow_steps": [
     "init", "topic", "settings", "character", "style",
     "structure", "research", "outline", "write", "review",
-    "science-review", "joint-review", "editor", "reader-review",
+    "editor", "reader-review",
     "consistency", "export", "wrap"
   ],
 
@@ -25,10 +25,8 @@
     "structure": ["research", "settings", "character"],
     "research": ["outline"],
     "outline": ["write", "settings", "character", "style"],
-    "write": ["review", "joint-review", "outline", "character"],
-    "review": ["science-review", "editor"],
-    "science-review": ["editor"],
-    "joint-review": ["editor"],
+    "write": ["review", "outline", "character"],
+    "review": ["editor"],
     "editor": ["reader-review"],
     "reader-review": ["consistency", "write"],
     "consistency": ["export", "editor"],
@@ -69,9 +67,7 @@
     "typer-review": {
       "dirs_not_empty": [".claude/temp"]
     },
-    "typer-science-review": {
-      "dirs_not_empty": [".claude/temp"]
-    },
+
     "typer-reader-review": {
       "pattern": ".claude/temp/*读者审稿*"
     },
@@ -85,7 +81,7 @@
       "files_exist": [".claude/temp/卷终-设定扫描.md", ".claude/temp/卷终-哲学审计.md", "0-角色档案/卷末角色状态.md"]
     },
     "typer-index": {
-      "files_exist": [".clarke/clark.db"]
+      "files_exist": [".clark/clark.db"]
     }
   },
 

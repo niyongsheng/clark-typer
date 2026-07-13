@@ -30,11 +30,11 @@ from typing import Optional
 
 # ── Project paths (overridable via env for testing) ────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-DB_DIR = Path(os.environ.get("CLARKE_DB_DIR", str(PROJECT_ROOT / ".clarke")))
-DB_PATH = Path(os.environ.get("CLARKE_DB_PATH", str(DB_DIR / "clark.db")))
-CHAPTERS_DIR = Path(os.environ.get("CLARKE_CHAPTERS_DIR", str(PROJECT_ROOT / "7-正文")))
-CHARACTER_FILE = Path(os.environ.get("CLARKE_CHARACTER_FILE", str(PROJECT_ROOT / "0-角色档案" / "核心人物.md")))
-RESEARCH_DIR = Path(os.environ.get("CLARKE_RESEARCH_DIR", str(PROJECT_ROOT / "8-参考资料")))
+DB_DIR = Path(os.environ.get("CLARK_DB_DIR", str(PROJECT_ROOT / ".clark")))
+DB_PATH = Path(os.environ.get("CLARK_DB_PATH", str(DB_DIR / "clark.db")))
+CHAPTERS_DIR = Path(os.environ.get("CLARK_CHAPTERS_DIR", str(PROJECT_ROOT / "7-正文")))
+CHARACTER_FILE = Path(os.environ.get("CLARK_CHARACTER_FILE", str(PROJECT_ROOT / "0-角色档案" / "核心人物.md")))
+RESEARCH_DIR = Path(os.environ.get("CLARK_RESEARCH_DIR", str(PROJECT_ROOT / "8-参考资料")))
 
 
 def _safe_relative_path(path: Path, base: Path) -> str:

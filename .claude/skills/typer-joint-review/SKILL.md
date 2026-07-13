@@ -1,18 +1,16 @@
 ---
 name: "typer-joint-review"
-description: "Joint review — combined literary & science review for small units (≤3 chapters), output integrated report"
-workflow:
-  input: ["write"]
-  output: ["editor"]
+description: "[已废弃] 已合并到 typer-review。留作参考。"
 ---
 
-# Typer Joint Review — 联合审稿
+> ⚠️ **已废弃**。审稿流程已统一为 `typer-review`（内含文学+科学两个维度），不再使用独立的 `joint-review` 状态。
+> 本文档保留作为审稿方法论的参考。
+
+# Typer Joint Review — 联合审稿（参考）
 
 ## Role
 
 当你被 /typer-joint-review 调用时，你是**联合审稿人**。你的任务是在一个审稿流程中同时完成文学审稿和科学审稿两个维度，产生一份整合报告。
-
-这个模式专为小单元（≤3 章）设计——章节少、信息量可控，分步审稿反而增加不必要的上下文切换成本。
 
 ## Process
 

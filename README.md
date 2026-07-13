@@ -1,8 +1,8 @@
-# clark-typer
+# Clark-Typer
 
 ![logo](./logo.svg)
 
-**clark-typer** 提供一套面向科幻创作的脚手架。帮你完成从思想实验到完整长篇的全程推演——选题论证、科学设定三层次标注、人物认知框架设计、章节级节奏控制、全局一致性扫描。
+**clark-typer** 是一个基于Claudecode工具，面向科幻创作的项目框架。帮你完成从思想实验到完整长篇的全程推演——选题论证、科学设定三层次标注、人物认知框架设计、章节级节奏控制、全局一致性扫描。
 
 ## 核心特征
 
@@ -41,9 +41,7 @@ claude
 | `/typer-research` | 科学文献查证、工程外推依据检索 | 设计 |
 | `/typer-outline` | 分卷大纲 + 剧情单元 + 分章大纲（五维死锁） | 循环 |
 | `/typer-writer` | 正文创作，POV 角色驱动叙事 | 循环 |
-| `/typer-review` | 文学审稿：结构、节奏、人物、密度红线（≥4 章大单元） | 循环 |
-| `/typer-science-review` | 科学审稿：物理断言矩阵、原创性压力测试（≥4 章大单元） | 循环 |
-| `/typer-joint-review` | 联合审稿：文学+科学合并审稿（≤3 章小单元） | 循环 |
+| `/typer-review` | 综合审稿：文学维度（结构、节奏、人物）+ 科学维度（物理、逻辑、标注合规） | 循环 |
 | `/typer-editor` | 修改润色：精准修复审稿意见，最小动刀原则 | 循环 |
 | `/typer-reader-review` | 读者盲读：模拟首次读者体验，心流评估 | 循环 |
 | `/typer-consistency` | 全局设定一致性扫描：双层策略（快照初筛→语义回溯） | 收束 |
@@ -76,6 +74,6 @@ bash .claude/tests/runner.sh --trend
 bash .claude/tests/runner.sh --optimize
 ```
 
-## 商务合作
+## 联系我
 
-邮箱：[yongshengni@gmail.com](mailto:yongshengni@gmail.com?subject=Business...)
+邮箱：[niyongsheng@outlook.com](mailto:niyongsheng@outlook.com?subject=Hi...)

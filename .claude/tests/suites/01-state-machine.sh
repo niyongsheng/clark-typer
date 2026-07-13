@@ -17,7 +17,7 @@ init_test_run
 describe "所有 CLAUDE.md 声明的 step 在 current-state.md 中都存在"
 
 STATE_STEPS=$(grep "^# Values:" "$STATE_FILE" | sed 's/.*: *//' | tr '/' ' ')
-CLAUDE_STEPS="init topic settings character style structure research outline write review science-review joint-review editor reader-review consistency export wrap"
+CLAUDE_STEPS="init topic settings character style structure research outline write review editor reader-review consistency export wrap"
 
 for step in $CLAUDE_STEPS; do
   if echo "$STATE_STEPS" | grep -wq "$step"; then
@@ -60,7 +60,7 @@ fi
 describe "状态转换规则符合 CLAUDE.md 定义"
 
 # Verify that source steps can reach their expected targets
-# write → review or joint-review
+# write → review
 WRITE_TRANSITIONS=$(get_valid_transitions "write")
 if echo "$WRITE_TRANSITIONS" | grep -q "review"; then
   echo "    $PASS write → review is a valid transition"
@@ -69,23 +69,9 @@ else
   echo "    $FAIL write → review should be valid"
   ((TEST_FAIL++))
 fi
-if echo "$WRITE_TRANSITIONS" | grep -q "joint-review"; then
-  echo "    $PASS write → joint-review is a valid transition"
-  ((TEST_PASS++))
-else
-  echo "    $FAIL write → joint-review should be valid"
-  ((TEST_FAIL++))
-fi
 
-# review → science-review or editor
+# review → editor
 REVIEW_TRANSITIONS=$(get_valid_transitions "review")
-if echo "$REVIEW_TRANSITIONS" | grep -q "science-review"; then
-  echo "    $PASS review → science-review is a valid transition"
-  ((TEST_PASS++))
-else
-  echo "    $FAIL review → science-review should be valid"
-  ((TEST_FAIL++))
-fi
 if echo "$REVIEW_TRANSITIONS" | grep -q "editor"; then
   echo "    $PASS review → editor is a valid transition"
   ((TEST_PASS++))
@@ -121,23 +107,16 @@ else
   ((TEST_FAIL++))
 fi
 
-# ── Test: branching logic (joint-review vs review+science-review) ─
+# ── Test: review flow is unified ────────────────────────────────────
 
-describe "审稿分流逻辑可用"
+describe "审稿流程为统一 review"
 
-# Verify that the state file comment correctly describes the branching
-if grep -q "≤3章用 joint-review" "$STATE_FILE"; then
-  echo "    $PASS Branching rule documented (joint-review for ≤3 chapters)"
+# Verify that the state file comment correctly describes the unified review
+if grep -q "内含文学+科学两个维度" "$STATE_FILE"; then
+  echo "    $PASS Unified review rule documented (literary + science dimensions in one step)"
   ((TEST_PASS++))
 else
-  echo "    $FAIL Missing branching rule documentation in current-state.md"
-  ((TEST_FAIL++))
-fi
-if grep -q "≥4章用 review" "$STATE_FILE"; then
-  echo "    $PASS Branching rule documented (review+science-review for ≥4 chapters)"
-  ((TEST_PASS++))
-else
-  echo "    $FAIL Missing branching rule documentation in current-state.md"
+  echo "    $FAIL Missing unified review documentation in current-state.md"
   ((TEST_FAIL++))
 fi
 

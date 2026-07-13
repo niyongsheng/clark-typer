@@ -34,7 +34,7 @@
     },
     "typer-science-review": {
       "name": "typer-science-review",
-      "description": "Science review — physics/math/logic consistency"
+      "description": "[已合并到 typer-review] 科学审稿参考清单"
     },
     "typer-editor": {
       "name": "typer-editor",
@@ -67,10 +67,6 @@
     "typer-wrap": {
       "name": "typer-wrap",
       "description": "Volume wrap-up — setting holographic scan, philosophical thread audit, character state closure"
-    },
-    "typer-joint-review": {
-      "name": "typer-joint-review",
-      "description": "Joint review — combined literary & science review for small units (≤3 chapters)"
     },
     "typer-dashboard": {
       "name": "typer-dashboard",

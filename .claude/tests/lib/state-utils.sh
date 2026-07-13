@@ -49,7 +49,7 @@ else:
   else
     # Fallback: hardcoded list from CLAUDE.md
     case "$step" in
-      init|topic|settings|character|style|structure|research|outline|write|review|science-review|joint-review|editor|reader-review|consistency|export|wrap) return 0 ;;
+      init|topic|settings|character|style|structure|research|outline|write|review|editor|reader-review|consistency|export|wrap) return 0 ;;
       *) echo "Unknown step: $step"; return 1 ;;
     esac
   fi

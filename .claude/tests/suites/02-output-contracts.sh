@@ -26,7 +26,7 @@ assert_dir_empty "6-分章大纲"
 assert_dir_empty "7-正文"
 assert_dir_empty "8-参考资料"
 assert_dir_empty "9-素材碎片"
-assert_file_not_exists ".clarke/clark.db"
+assert_file_not_exists ".clark/clark.db"
 
 # ── typer-topic ─────────────────────────────────────────────────
 
@@ -142,7 +142,7 @@ if [[ -f "$snapshot_file" ]]; then
   fi
 fi
 
-# ── typer-review / typer-science-review ─────────────────────────
+# ── typer-review ────────────────────────────────────────────────
 
 describe "审稿报告"
 
@@ -207,7 +207,7 @@ assert_file_exists "0-角色档案/卷末角色状态.md"
 
 describe "语义索引层"
 
-assert_file_exists ".clarke/clark.db"
+assert_file_exists ".clark/clark.db"
 
 # ── Summary ──────────────────────────────────────────────────────
 

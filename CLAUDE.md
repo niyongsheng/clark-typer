@@ -10,7 +10,7 @@
 ## 🧭 工作流与状态机
 
 系统通过 `.claude/current-state.md` 维持状态。`workflow_step` 必须为以下枚举值之一：
-`init` ➔ `topic` ➔ `settings` ➔ `character` ➔ `style` ➔ `structure` ➔ `research` ➔ `outline` ➔ `write` ➔ `review` / `joint-review` ➔ `editor` ➔ `reader-review` ➔ `consistency` ➔ `export` ➔ `wrap`
+`init` ➔ `topic` ➔ `settings` ➔ `character` ➔ `style` ➔ `structure` ➔ `research` ➔ `outline` ➔ `write` ➔ `review` ➔ `editor` ➔ `reader-review` ➔ `consistency` ➔ `export` ➔ `wrap`
 
 `typer-index` 和 `typer-dashboard` 是基础架构技能，不占用 workflow_step，可在任意阶段调用。
 
@@ -30,21 +30,17 @@ init → topic → settings → character → style → structure → research �
 
 #### 单元循环 (Unit Loop)
 ```
-                    ┌──────────────────────────────┐
-                    │  research → outline → write   │
-                    │         ↓ (分流审稿)          │
-                    │  ┌── joint-review (≤3章) ──┐  │
-                    │  │  review → science-review │  │
-                    │  └── (≥4章 分步) ──────────┘  │
-                    │         ↓                     │
-                    │  editor → reader-review       │
-                    └──────────重启─────────────────┘
+                    ┌──────────────────────────┐
+                    │  research → outline → write│
+                    │         ↓ (审稿)          │
+                    │  review（含文学+科学维度）│
+                    │         ↓                 │
+                    │  editor → reader-review   │
+                    └──────────重启─────────────┘
 ```
 循环内的每一步都可以回溯至设计阶段（见 §3 回溯机制）。
 
-*   **分流规则**：
-    *   **小单元（≤3章）**：激活联合审稿模式（`joint-review`），文学与科学维度合并为一份报告，直接通往 `editor`。
-    *   **大单元（≥4章）**：激活分步审稿模式，先进行 `typer-review`（文学），通过后再执行 `typer-science-review`（科学）。
+*   **审稿机制**：`typer-review` 的审稿报告在内部包含**文学部分**与**科学部分**两个维度，一次性产出整合报告，无需分步进行。
 *   **试读打磨机制**：全书第一卷第一单元在 `reader-review` 完成后自动暂停，交由用户试读前三章确认整体基调，满意并手动释放后，方可推进后续单元。
 
 #### 卷终工序 (Volume Wrap-up)
@@ -65,10 +61,8 @@ init → topic → settings → character → style → structure → research �
 | structure | research, settings, character | 架构完成→科研，或回溯至设定/人物 |
 | research | outline | 科研完成→大纲 |
 | outline | write, settings, character, style | 大纲完成→写作，或回溯至设定/人物/风格 |
-| write | review, joint-review, outline, character | 正文完成→分流审稿，或回溯至大纲/人物 |
-| review | science-review, editor | 文学审稿→科学审稿，或直接到润色 |
-| science-review | editor | 科学审稿→润色 |
-| joint-review | editor | 联合审稿→润色 |
+| write | review, outline, character | 正文完成→审稿，或回溯至大纲/人物 |
+| review | editor | 审稿完成→润色 |
 | editor | reader-review | 润色完成→读者盲读 |
 | reader-review | consistency, write | 盲读完成→一致性扫描，或回溯至写作 |
 | consistency | export, editor | 一致性通过→导出，不一致→回润色修复 |
@@ -84,7 +78,9 @@ init → topic → settings → character → style → structure → research �
 *   **读者反馈回溯**：`reader-review` → `write` — 读者盲读发现流畅度或理解障碍问题，需重写。
 *   **一致性回溯**：`consistency` → `editor` — 一致性扫描发现矛盾，回润色修复后重新扫描。
 
-**科学熔断（暂停）**：若科学审稿发现严重违背物理定律且超出核心假设边界的硬伤，立刻拦截工作流，暂停并通知用户。
+**文件收敛约定**：回溯时源文件改名添加 `.bak` 后缀保留在原目录，然后新建空白文件重新写。回溯完成确认无误后手动删除 `.bak` 文件。例如回溯到人物设计时：`0-角色档案/核心人物.md` → `0-角色档案/核心人物.bak.md`，再新建 `0-角色档案/核心人物.md`。该策略在 `current-state.md` 的 `backup_paths` 字段中记录已搁置的文件以便清理时追踪。
+
+**科学熔断（暂停）**：若审稿发现严重违背物理定律且超出核心假设边界的硬伤，立刻拦截工作流，暂停并通知用户。
 
 ---
 
@@ -92,7 +88,7 @@ init → topic → settings → character → style → structure → research �
 
 ### 1. 双层存储模型 (Dual-Layer Architecture)
 *   **Human Layer (Markdown)**：人类可读、Git 追踪的结构化文档。
-*   **Machine Layer (SQLite-Vec)**：保存在 `.clarke/clark.db`。写完一章后自动通过 Hook 调用 `typer-index` 进行向量化与关系网络构建。在进行审稿和一致性检查时，**必须先通过机器层进行快照初筛与语义定位，再回溯人文层全文**。
+*   **Machine Layer (SQLite-Vec)**：保存在 `.clark/clark.db`。每写完一章后通过 `typer-writer` 调用 `typer-index` 进行向量化与关系网络构建。在进行审稿和一致性检查时，可联合 `typer-index` 进行靶向语义定位，再回溯人文层全文。
 
 ### 2. 严格命名与目录规则
 *   **正文格式**：**必须**为纯文本 `.txt`（例：`7-正文/第X章.txt`），严禁使用 `.md` 导出正文。
@@ -112,7 +108,7 @@ clark-typer/
 ├── 8-参考资料/          # 科学文献与研究报告
 ├── 9-素材碎片/          # 编辑删除但值得保留的文字沉淀
 ├── 打包发布/            # 成品导出（EPUB/PDF/TXT）
-├── .clarke/             # Machine Layer 向量库 (clark.db)
+├── .clark/              # Machine Layer 向量库 (clark.db)
 └── .claude/             # current-state.md + chapter-snapshot.md
 
 ```

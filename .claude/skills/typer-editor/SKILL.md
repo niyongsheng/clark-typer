@@ -2,7 +2,7 @@
 name: "typer-editor"
 description: "Editing & polishing — precise review fixes, minimal change principle, sync metadata & index"
 workflow:
-  input: ["review", "science-review", "joint-review", "consistency"]
+  input: ["review", "consistency"]
   output: ["reader-review"]
 ---
 
@@ -15,7 +15,7 @@ workflow:
 ## Process
 
 ### 1. 意见并轨
-横向装载文学审稿与科学审稿（或联合审稿）报告，确立修改清单。修改优先级：科学硬伤 > 一致性矛盾 > 文学质量润色。
+横向装载综合审稿报告（内含文学+科学两个维度），确立修改清单。修改优先级：科学硬伤 > 一致性矛盾 > 文学质量润色。
 
 ### 2. 最小动刀原则
 精准修复存在问题的特定段落，严禁在润色过程中推翻重写可接受的段落，严禁在修改时引入未经测试的全新设定。

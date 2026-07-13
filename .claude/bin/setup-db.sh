@@ -22,4 +22,4 @@ echo "[setup-db] Installing dependencies..."
 echo "[setup-db] Initializing database..."
 .claude/.venv/bin/python .claude/bin/typer-index.py init
 
-echo "[setup-db] Done. clark.db is ready at .clarke/clark.db"
+echo "[setup-db] Done. clark.db is ready at .clark/clark.db"
