@@ -15,10 +15,16 @@ workflow:
 ## Process
 
 ### 0. 工具链环境检查
-执行导出前，检查必要的外部工具是否可用：
-- **EPUB 导出**：需要 `python` 环境及 `ebooklib` 库，或 `pandoc` CLI 工具。缺失时提示安装。
-- **PDF 导出**：需要 `python` 环境及 `reportlab` / `weasyprint` 库，或 `pandoc` + `wkhtmltopdf`。缺失时尝试纯 Python 回退方案或提示安装。
+执行导出前，检查必要的外部工具是否可用。对于缺失的工具，使用 `AskUserQuestion` 让创作者选择处理方式：
+- **EPUB 导出**：需要 `python` 环境及 `ebooklib` 库，或 `pandoc` CLI 工具。
+- **PDF 导出**：需要 `python` 环境及 `reportlab` / `weasyprint` 库，或 `pandoc` + `wkhtmltopdf`。
 - **TXT 导出**：无需外部依赖。
+
+针对每个缺失的工具，提供选项：
+- **尝试自动安装** — 尝试通过 pip/brew 安装缺失依赖
+- **跳过此格式** — 仅导出其他可用格式
+- **仅导出 TXT** — 退回纯文本导出（始终可用）
+- **放弃导出** — 退出导出流程
 
 ### 1. 上下文装载
 全量加载 `7-正文/` 下的所有 `.txt` 章节文件，读取 `1-思想实验/选题.md` 提取最终确立的书名、作者名及核心元数据。
