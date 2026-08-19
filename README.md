@@ -55,12 +55,14 @@ flowchart TB
 ```mermaid
 stateDiagram-v2
     direction TB
+    state "style" as st
+    state "reader-review" as rr
     [*] --> init
     init --> topic: 选题对谈（篇幅分叉）
     topic --> settings
     settings --> character
-    character --> style
-    style --> structure
+    character --> st
+    st --> structure
     structure --> research
     research --> outline
 
@@ -68,8 +70,8 @@ stateDiagram-v2
         outline --> write
         write --> review
         review --> editor
-        editor --> reader-review
-        reader-review --> outline
+        editor --> rr
+        rr --> outline
     }
 
     loop --> consistency: 卷终扫描
@@ -79,7 +81,7 @@ stateDiagram-v2
 
     outline --> settings: 回溯（设定不足）
     write --> outline: 回溯（结构/人物崩溃）
-    reader-review --> write: 读者反馈重写
+    rr --> write: 读者反馈重写
     consistency --> editor: 不一致回润色
 ```
 
