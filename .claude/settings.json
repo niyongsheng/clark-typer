@@ -56,6 +56,10 @@
       "name": "typer-init",
       "description": "Project init/reset — clear content, rebuild directory structure"
     },
+    "typer-import": {
+      "name": "typer-import",
+      "description": "Import external works (TXT/EPUB/PDF) — parse into chapters and scaffold for continuation or remix"
+    },
     "typer-reader-review": {
       "name": "typer-reader-review",
       "description": "Reader blind review — simulate first-time reader experience, assess fluency, comprehension, emotional impact, engagement"
