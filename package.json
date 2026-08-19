@@ -1,0 +1,20 @@
+{
+  "name": "clark-typer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@10.29.2",
+  "scripts": {
+    "build:content": "pnpm --filter @clark-typer/content build",
+    "content:sync": "pnpm build:content && pnpm --filter @clark-typer/content sync",
+    "dev": "pnpm build:content && pnpm --filter @clark-typer/web dev",
+    "build": "pnpm content:sync && pnpm --filter @clark-typer/web build",
+    "preview": "pnpm --filter @clark-typer/web preview",
+    "typecheck": "pnpm build:content && pnpm --filter @clark-typer/web typecheck",
+    "lint": "biome check .",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4"
+  }
+}
