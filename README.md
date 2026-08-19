@@ -2,6 +2,15 @@
 
 ![logo](./logo.png)
 
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-Agent-%23D97757?logo=anthropic&logoColor=white)](https://claude.com/claude-code)
+[![Vite](https://img.shields.io/badge/Vite-6-%23646CFF?logo=vite&logoColor=white)](https://vite.dev)
+[![React](https://img.shields.io/badge/React-19-%2361DAFB?logo=react&logoColor=white)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-%233178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-%2306B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![pnpm](https://img.shields.io/badge/pnpm-10-%23F69220?logo=pnpm&logoColor=white)](https://pnpm.io)
+[![Deploy](https://github.com/niyongsheng/clark-typer/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/niyongsheng/clark-typer/actions/workflows/deploy-pages.yml)
+[![Pages](https://img.shields.io/badge/GitHub%20Pages-live-%23222222?logo=github&logoColor=white)](https://niyongsheng.github.io/clark-typer/)
+
 **clark-typer** 是一个基于 Claude Code 的硬科幻创作框架。从思想实验到完整长篇的全程推演——选题论证、科学设定三层次标注、人物认知框架设计、章节级节奏控制、全局一致性扫描。支持自动化创作工作流 `workflows loop`，同时提供用户结构化分支选择。
 
 ## 核心特征
@@ -105,7 +114,7 @@ claude
 
 ### 技术栈
 
-Vite 6 · React 19 · react-router 7 · TanStack Query · Zustand · Tailwind CSS 4，采用 pnpm workspace monorepo。
+Vite 6 · React 19 · react-router 7 · TanStack Query · Zustand · Tailwind CSS 4
 
 ### 启动
 
@@ -116,6 +125,7 @@ pnpm build      # 生产构建（含 content.json 静态快照）
 pnpm preview    # 本地预览生产构建
 pnpm typecheck  # 类型检查
 ```
+https://niyongsheng.github.io/clark-typer/
 
 ## 技能一览
 
@@ -133,10 +143,10 @@ pnpm typecheck  # 类型检查
 | `/typer-research` | 科学文献查证、工程外推依据检索 | 设计 |
 | `/typer-outline` | 分卷大纲 + 剧情单元 + 分章大纲（五维死锁） | 循环 |
 | `/typer-writer` | 正文创作，POV 角色驱动叙事 | 循环 |
-| `/typer-review` | 综合审稿：文学维度（结构、节奏、人物）+ 科学维度（物理、逻辑、标注合规） | 循环 |
+| `/typer-review` | 综合审稿：文学维度 + 科学维度 | 循环 |
 | `/typer-editor` | 修改润色：精准修复审稿意见，最小动刀原则 | 循环 |
 | `/typer-reader-review` | 读者盲读：模拟首次读者体验，心流评估 | 循环 |
-| `/typer-consistency` | 全局设定一致性扫描：双层策略（快照初筛→语义回溯） | 收束 |
+| `/typer-consistency` | 全局一致性扫描：双层策略（快照初筛→语义回溯） | 收束 |
 | `/typer-export` | 导出 TXT/EPUB/PDF | 收束 |
 | `/typer-wrap` | 卷终工序：设定全息扫描、哲学审计、上下文收束 | 收束 |
 
