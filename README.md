@@ -1,8 +1,8 @@
 # Clark-Typer
 
-![logo](./logo.svg)
+![logo](./logo.png)
 
-**clark-typer** 是一个基于 Claude Code 的硬科幻创作框架。从思想实验到完整长篇的全程推演——选题论证、科学设定三层次标注、人物认知框架设计、章节级节奏控制、全局一致性扫描。每个与用户的交互节点均使用 `AskUserQuestion` 提供结构化选择。
+**clark-typer** 是一个基于 Claude Code 的硬科幻创作框架。从思想实验到完整长篇的全程推演——选题论证、科学设定三层次标注、人物认知框架设计、章节级节奏控制、全局一致性扫描。支持自动化创作工作流 `workflows loop`，同时提供用户结构化分支选择。
 
 ## 核心特征
 
@@ -11,6 +11,77 @@
 - **流程即代码** — 选题→设定→大纲→写作→审稿→修改，每个环节编码为自包含 Skill，输入输出明确可追溯。
 - **快照层一致性扫描** — Append-only 章节元数据表，全局设定冲突检测先查索引再回溯全文，无需每次都通读。
 - **可回溯的线性流程** — 不拒绝回退：大纲发现设定不足→补设定；写作发现人物立不住→回人物设计。每一步保留上下文，不丢进度。
+
+## 架构设计
+
+### 总体架构
+
+双轨架构：Claude Code Skills 驱动创作流程，Markdown 目录是人类可读的唯一事实源（Git 追踪每次修改），sqlite-vec 提供机器语义层；Web 工作台读取 `content:sync` 生成的静态快照，供可视化浏览与编辑。
+
+```mermaid
+flowchart TB
+    Entry(["clark-typer"]) --> Claude["Claude Code<br/>Skills 创作引擎"]
+    Entry --> Web["Web 工作台<br/>Vite 6 · React 19 · TanStack Query"]
+
+    Claude --> Core["clark-core"]
+    Web --> Snapshot["Static Snapshot<br/>content.json（content:sync）"]
+
+    subgraph Core["clark-core"]
+        SM["State Machine<br/>design → unit-loop → wrap"]
+        ANNO["Science Annotation<br/>已知科学 / 合理外推 / 核心假设"]
+        REVIEW["Joint Review<br/>文学 + 科学双维审稿"]
+        INDEX["Semantic Index<br/>typer-index · sqlite-vec"]
+    end
+
+    subgraph Storage["clark-storage"]
+        MD["Markdown Layer<br/>0-角色档案 … 7-正文 · Git 追踪"]
+        DB["SQLite-Vec<br/>.clark/clark.db · 语义检索"]
+        PKG["打包发布<br/>TXT / EPUB / PDF"]
+    end
+
+    Core --> Storage
+    MD --> Snapshot
+    Snapshot --> Web
+
+    Claude --> ClaudeAPI["Claude API<br/>Opus / Sonnet / Haiku"]
+    Web --> Pages["GitHub Pages<br/>push 自动部署"]
+    Web --> Vercel["Vercel<br/>Production"]
+```
+
+### 工作流状态机
+
+`workflow_step` 沿设计 → 循环 → 收束推进；单元循环内部可反复迭代，回溯边保留已产出内容（`.bak` 收敛），科学硬伤触发熔断暂停。
+
+```mermaid
+stateDiagram-v2
+    direction TB
+    [*] --> init
+    init --> topic: 选题对谈（篇幅分叉）
+    topic --> settings
+    settings --> character
+    character --> style
+    style --> structure
+    structure --> research
+    research --> outline
+
+    state "单元循环" as loop {
+        outline --> write
+        write --> review
+        review --> editor
+        editor --> reader-review
+        reader-review --> outline
+    }
+
+    loop --> consistency: 卷终扫描
+    consistency --> export
+    export --> wrap
+    wrap --> [*]
+
+    outline --> settings: 回溯（设定不足）
+    write --> outline: 回溯（结构/人物崩溃）
+    reader-review --> write: 读者反馈重写
+    consistency --> editor: 不一致回润色
+```
 
 ## 快速上手
 
@@ -24,6 +95,24 @@ claude
 
 # 在交互模式中输入斜杠命令初始化项目
 /typer-init
+```
+
+## Web 工作台
+
+项目内置可视化工作台（`apps/web`），用于浏览与编辑创作产物，是 Claude Code 工作流的补充前端。
+
+### 技术栈
+
+Vite 6 · React 19 · react-router 7 · TanStack Query · Zustand · Tailwind CSS 4，采用 pnpm workspace monorepo。
+
+### 启动
+
+```bash
+pnpm install
+pnpm dev        # 构建内容解析层后启动开发服务器（默认 http://localhost:5173）
+pnpm build      # 生产构建（含 content.json 静态快照）
+pnpm preview    # 本地预览生产构建
+pnpm typecheck  # 类型检查
 ```
 
 ## 技能一览
