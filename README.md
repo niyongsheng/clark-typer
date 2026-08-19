@@ -9,7 +9,6 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-%2306B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![pnpm](https://img.shields.io/badge/pnpm-10-%23F69220?logo=pnpm&logoColor=white)](https://pnpm.io)
 [![Deploy](https://github.com/niyongsheng/clark-typer/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/niyongsheng/clark-typer/actions/workflows/deploy-pages.yml)
-[![Pages](https://img.shields.io/badge/GitHub%20Pages-live-%23222222?logo=github&logoColor=white)](https://niyongsheng.github.io/clark-typer/)
 
 **clark-typer** 是一个基于 Claude Code 的硬科幻创作框架。从思想实验到完整长篇的全程推演——选题论证、科学设定三层次标注、人物认知框架设计、章节级节奏控制、全局一致性扫描。支持自动化创作工作流 `workflows loop`，同时提供用户结构化分支选择。
 
