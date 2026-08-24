@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { isMobileViewport } from "../lib/useIsMobile";
 
 const WIDTH_KEY = "clark-sidebar-width";
 const MIN_WIDTH = 160;
@@ -23,7 +24,7 @@ interface SidebarState {
 }
 
 export const useSidebarStore = create<SidebarState>((set) => ({
-  collapsed: false,
+  collapsed: isMobileViewport(),
   width: readWidth(),
   toggleCollapsed: () => set((s) => ({ collapsed: !s.collapsed })),
   setWidth: (width) => {

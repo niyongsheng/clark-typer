@@ -18,6 +18,7 @@ import { useState, type MouseEvent as ReactMouseEvent } from "react";
 import { Link, useLocation, useSearchParams } from "react-router";
 import { fetchContent } from "../lib/api";
 import { useI18n, type MessageKey } from "../lib/i18n";
+import { useIsMobile } from "../lib/useIsMobile";
 import { useSidebarStore } from "../stores/useSidebarStore";
 
 interface NavItem {
@@ -62,13 +63,16 @@ export function Sidebar() {
   const collapsed = useSidebarStore((s) => s.collapsed);
   const width = useSidebarStore((s) => s.width);
   const setWidth = useSidebarStore((s) => s.setWidth);
+  const toggleCollapsed = useSidebarStore((s) => s.toggleCollapsed);
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const { data: content } = useQuery({ queryKey: ["content"], queryFn: fetchContent });
   const { t } = useI18n();
   const [collapsedVols, setCollapsedVols] = useState<Set<number>>(new Set());
+  const isMobile = useIsMobile();
 
-  if (collapsed) return null;
+  // 桌面端折叠时直接不渲染；移动端始终挂载以支持抽屉滑入/滑出过渡动画。
+  if (collapsed && !isMobile) return null;
 
   const startResize = (e: ReactMouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -97,82 +101,111 @@ export function Sidebar() {
   const chapterParam = searchParams.get("chapter");
   const activeChapter = chapterParam ? Number(chapterParam) : NaN;
 
+  // 移动端点击导航后自动收起抽屉。
+  const closeOnNavigate = () => {
+    if (isMobile && !collapsed) toggleCollapsed();
+  };
+
+  const menu = (
+    <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto">
+      {/* 卷章树 */}
+      <div className="py-3">
+        <div className="flex items-center gap-1.5 px-4 pb-2 text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--ink-mute)]">
+          <BookOpen className="h-3.5 w-3.5" />
+          {t("nav.group.manuscript")}
+        </div>
+        {volumes.length === 0 ? (
+          <div className="px-5 py-1 text-[13px] text-[var(--ink-mute)]">{t("nav.emptyVolume")}</div>
+        ) : (
+          volumes.map((vol) => (
+            <div key={vol.no}>
+              <div
+                className="flex cursor-pointer select-none items-center gap-1.5 px-3 py-1.5 font-display text-[15px] font-medium text-[var(--ink)]"
+                onClick={() => toggleVolume(vol.no)}
+              >
+                <span
+                  className={`text-[10px] text-[var(--ink-mute)] transition-transform duration-200 ${collapsedVols.has(vol.no) ? "-rotate-90" : ""}`}
+                >
+                  ▼
+                </span>
+                <span className="flex-1">{vol.title || `第${vol.no}卷`}</span>
+              </div>
+              {!collapsedVols.has(vol.no) &&
+                chapters
+                  .filter((c) => c.volume === vol.no)
+                  .map((ch) => (
+                    <Link
+                      key={ch.no}
+                      to={`/writing?chapter=${ch.no}`}
+                      onClick={closeOnNavigate}
+                      className={`flex items-center gap-1.5 py-1 pl-5 pr-4 text-[13px] ${location.pathname === "/writing" && activeChapter === ch.no
+                        ? "bg-[var(--accent-gold-soft-bg)] text-[var(--accent-gold)]"
+                        : "text-[var(--ink-secondary)] hover:bg-[var(--canvas-card)]"
+                        }`}
+                    >
+                      <span className="flex-1 truncate">{ch.title ? `第${ch.no}章 ${ch.title}` : `第${ch.no}章`}</span>
+                      <StatusBadge status={ch.status} />
+                    </Link>
+                  ))}
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="mx-3 h-px bg-[var(--hairline)]" />
+
+      {/* 创作导航 */}
+      <div className="py-3">
+        <div className="px-4 pb-2 text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--ink-mute)]">
+          {t("nav.group.create")}
+        </div>
+        {NAV_ITEMS.map((item) => {
+          const active =
+            (item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path)) &&
+            !(item.path === "/writing" && chapterParam !== null);
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={closeOnNavigate}
+              className={`flex items-center gap-2 px-4 py-1 text-[13px] ${active
+                ? "bg-[var(--accent-gold-soft-bg)] text-[var(--accent-gold)]"
+                : "text-[var(--ink-secondary)] hover:bg-[var(--canvas-mid)] hover:text-[var(--ink)]"
+                }`}
+            >
+              <item.icon className="h-4 w-4 shrink-0" />
+              <span className="flex-1">{t(item.label)}</span>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <>
+        {/* 遮罩层 */}
+        <div
+          className={`fixed inset-x-0 bottom-0 top-[var(--titlebar-h)] z-30 bg-black/50 transition-opacity duration-200 ${collapsed ? "pointer-events-none opacity-0" : "opacity-100"}`}
+          onClick={toggleCollapsed}
+        />
+        {/* 浮动抽屉 */}
+        <aside
+          className={`fixed bottom-0 left-0 top-[var(--titlebar-h)] z-40 flex w-[260px] flex-col border-r border-[var(--hairline)] bg-[var(--canvas-soft)] shadow-xl transition-transform duration-200 ${collapsed ? "-translate-x-full" : "translate-x-0"}`}
+        >
+          {menu}
+        </aside>
+      </>
+    );
+  }
+
   return (
     <aside
       className="relative flex shrink-0 flex-col border-r border-[var(--hairline)] bg-[var(--canvas-soft)]"
       style={{ width }}
     >
-      <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto">
-        {/* 卷章树 */}
-        <div className="py-3">
-          <div className="flex items-center gap-1.5 px-4 pb-2 text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--ink-mute)]">
-            <BookOpen className="h-3.5 w-3.5" />
-            {t("nav.group.manuscript")}
-          </div>
-          {volumes.length === 0 ? (
-            <div className="px-5 py-1 text-[13px] text-[var(--ink-mute)]">{t("nav.emptyVolume")}</div>
-          ) : (
-            volumes.map((vol) => (
-              <div key={vol.no}>
-                <div
-                  className="flex cursor-pointer select-none items-center gap-1.5 px-3 py-1.5 font-display text-[15px] font-medium text-[var(--ink)]"
-                  onClick={() => toggleVolume(vol.no)}
-                >
-                  <span
-                    className={`text-[10px] text-[var(--ink-mute)] transition-transform duration-200 ${collapsedVols.has(vol.no) ? "-rotate-90" : ""}`}
-                  >
-                    ▼
-                  </span>
-                  <span className="flex-1">{vol.title || `第${vol.no}卷`}</span>
-                </div>
-                {!collapsedVols.has(vol.no) &&
-                  chapters
-                    .filter((c) => c.volume === vol.no)
-                    .map((ch) => (
-                      <Link
-                        key={ch.no}
-                        to={`/writing?chapter=${ch.no}`}
-                        className={`flex items-center gap-1.5 py-1 pl-5 pr-4 text-[13px] ${location.pathname === "/writing" && activeChapter === ch.no
-                          ? "bg-[var(--accent-gold-soft-bg)] text-[var(--accent-gold)]"
-                          : "text-[var(--ink-secondary)] hover:bg-[var(--canvas-card)]"
-                          }`}
-                      >
-                        <span className="flex-1 truncate">{ch.title ? `第${ch.no}章 ${ch.title}` : `第${ch.no}章`}</span>
-                        <StatusBadge status={ch.status} />
-                      </Link>
-                    ))}
-              </div>
-            ))
-          )}
-        </div>
-
-        <div className="mx-3 h-px bg-[var(--hairline)]" />
-
-        {/* 创作导航 */}
-        <div className="py-3">
-          <div className="px-4 pb-2 text-[11px] font-medium uppercase tracking-[0.06em] text-[var(--ink-mute)]">
-            {t("nav.group.create")}
-          </div>
-          {NAV_ITEMS.map((item) => {
-            const active =
-              (item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path)) &&
-              !(item.path === "/writing" && chapterParam !== null);
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-2 px-4 py-1 text-[13px] ${active
-                  ? "bg-[var(--accent-gold-soft-bg)] text-[var(--accent-gold)]"
-                  : "text-[var(--ink-secondary)] hover:bg-[var(--canvas-mid)] hover:text-[var(--ink)]"
-                  }`}
-              >
-                <item.icon className="h-4 w-4 shrink-0" />
-                <span className="flex-1">{t(item.label)}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
+      {menu}
 
       {/* 拖拽调整宽度 */}
       <div
