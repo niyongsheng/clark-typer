@@ -28,32 +28,13 @@
 
 ```mermaid
 flowchart TB
-    Entry(["clark-typer"]) --> Claude["Claude Code<br/>Skills 创作引擎"]
-    Entry --> Web["Web 工作台<br/>Vite 6 · React 19 · TanStack Query"]
-
-    Claude --> Core["clark-core"]
-    Web --> Snapshot["Static Snapshot<br/>content.json（content:sync）"]
-
-    subgraph Core["clark-core"]
-        SM["State Machine<br/>design → unit-loop → wrap"]
-        ANNO["Science Annotation<br/>已知科学 / 合理外推 / 核心假设"]
-        REVIEW["Joint Review<br/>文学 + 科学双维审稿"]
-        INDEX["Semantic Index<br/>typer-index · sqlite-vec"]
-    end
-
-    subgraph Storage["clark-storage"]
-        MD["Markdown Layer<br/>0-角色档案 … 7-正文 · Git 追踪"]
-        DB["SQLite-Vec<br/>.clark/clark.db · 语义检索"]
-        PKG["打包发布<br/>TXT / EPUB / PDF"]
-    end
-
-    Core --> Storage
-    MD --> Snapshot
+    Entry(["clark-typer"]) --> Claude["Claude Code · Skills 创作引擎"]
+    Entry --> Web["Web 工作台"]
+    Claude --> Core["clark-core<br/>状态机 · 三层标注 · 双维审稿"]
+    Core --> Storage["clark-storage<br/>Markdown（Git） + sqlite-vec"]
+    Storage --> Snapshot["content.json 静态快照"]
     Snapshot --> Web
-
-    Claude --> ClaudeAPI["Claude API<br/>Opus / Sonnet / Haiku"]
-    Web --> Pages["GitHub Pages<br/>push 自动部署"]
-    Web --> Vercel["Vercel<br/>Production"]
+    Web --> Deploy["GitHub Pages / Vercel"]
 ```
 
 ### 工作流状态机
@@ -66,7 +47,7 @@ stateDiagram-v2
     state "style" as st
     state "reader-review" as rr
     [*] --> init
-    init --> topic: 选题对谈（篇幅分叉）
+    init --> topic: 篇幅分叉
     topic --> settings
     settings --> character
     character --> st
@@ -82,15 +63,12 @@ stateDiagram-v2
         rr --> outline
     }
 
-    loop --> consistency: 卷终扫描
+    loop --> consistency: 卷终
     consistency --> export
     export --> wrap
     wrap --> [*]
 
-    outline --> settings: 回溯（设定不足）
-    write --> outline: 回溯（结构/人物崩溃）
-    rr --> write: 读者反馈重写
-    consistency --> editor: 不一致回润色
+    loop --> settings: 回溯
 ```
 
 ## 快速上手
