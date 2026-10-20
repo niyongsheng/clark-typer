@@ -19,9 +19,11 @@ export function Outline() {
             {volumes.map((v) => (
               <div
                 key={v.no}
-                className="rounded-lg border border-[var(--hairline)] bg-[var(--canvas-card)] p-5"
+                className="rounded-none border border-[var(--hairline)] bg-[var(--canvas-card)] p-6"
               >
-                <h3 className="mb-3 font-display text-lg text-[var(--ink)]">{v.title}</h3>
+                <h3 className="mb-3 text-[18px] font-medium tracking-[-0.01em] text-[var(--ink)]">
+                  {v.title}
+                </h3>
                 <Markdown>{v.raw}</Markdown>
               </div>
             ))}
@@ -34,9 +36,9 @@ export function Outline() {
             {chapterOutlines.map((o) => (
               <div
                 key={o.no}
-                className="rounded-lg border border-[var(--hairline)] bg-[var(--canvas-card)] p-5"
+                className="rounded-none border border-[var(--hairline)] bg-[var(--canvas-card)] p-6"
               >
-                <h3 className="mb-3 font-display text-lg text-[var(--ink)]">
+                <h3 className="mb-3 text-[18px] font-medium tracking-[-0.01em] text-[var(--ink)]">
                   第{o.no}章 {o.title}
                 </h3>
                 <Markdown>{o.raw}</Markdown>

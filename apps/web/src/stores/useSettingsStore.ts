@@ -24,6 +24,8 @@ function readLocale(): Locale {
 
 function applyTheme(theme: Theme) {
   document.documentElement.setAttribute("data-theme", theme);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.setAttribute("content", theme === "light" ? "#e9f1e2" : "#07110b");
 }
 
 interface SettingsState {

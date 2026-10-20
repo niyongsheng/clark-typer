@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { ExternalLink, Github, Heart, Languages, Moon, Sun } from "lucide-react";
+import type { ReactNode } from "react";
 import { useI18n } from "../lib/i18n";
 import { useSettingsStore } from "../stores/useSettingsStore";
 
@@ -13,7 +13,7 @@ function Segmented<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <div className="inline-flex flex-wrap gap-1 rounded-lg border border-[var(--hairline)] bg-[var(--canvas)] p-1">
+    <div className="inline-flex flex-wrap gap-1 rounded-none border border-[var(--hairline)] bg-[var(--canvas-mid)] p-1">
       {options.map((o) => {
         const active = o.value === value;
         return (
@@ -21,10 +21,11 @@ function Segmented<T extends string>({
             key={o.value}
             type="button"
             onClick={() => onChange(o.value)}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] transition-colors ${active
-              ? "bg-[var(--canvas-elevated)] text-[var(--ink)]"
-              : "text-[var(--ink-mute)] hover:text-[var(--ink)]"
-              }`}
+            className={`flex items-center gap-1.5 rounded-none border px-3 py-1.5 text-[14px] transition-colors ${
+              active
+                ? "border-[var(--accent)] bg-[var(--accent-soft-bg)] text-[var(--accent-text)]"
+                : "border-transparent text-[var(--ink-mute)] hover:text-[var(--ink)]"
+            }`}
           >
             {o.icon}
             {o.label}
@@ -51,9 +52,9 @@ function LinkCard({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="flex items-start gap-3 rounded-lg border border-[var(--hairline)] bg-[var(--canvas-card)] p-4 transition-colors hover:bg-[var(--canvas-elevated)]"
+      className="flex items-start gap-3 rounded-none border border-[var(--hairline)] bg-[var(--canvas-card)] p-5 transition-colors hover:border-[var(--accent)] hover:bg-[var(--canvas-pop)] hover:shadow-[0_0_16px_var(--crt-glow-soft)]"
     >
-      <span className="mt-0.5 shrink-0" style={{ color: "var(--accent-gold)" }}>
+      <span className="mt-0.5 shrink-0" style={{ color: "var(--accent-text)" }}>
         {icon}
       </span>
       <span className="flex-1">
@@ -83,7 +84,7 @@ export function Settings() {
         {/* 语言 */}
         <section>
           <div className="dash-card-title">{t("settings.language")}</div>
-          <div className="rounded-lg border border-[var(--hairline)] bg-[var(--canvas-card)] p-4">
+          <div className="rounded-none border border-[var(--hairline)] bg-[var(--canvas-card)] p-5">
             <Segmented
               value={locale}
               onChange={setLocale}
@@ -98,13 +99,21 @@ export function Settings() {
         {/* 主题 */}
         <section>
           <div className="dash-card-title">{t("settings.theme")}</div>
-          <div className="rounded-lg border border-[var(--hairline)] bg-[var(--canvas-card)] p-4">
+          <div className="rounded-none border border-[var(--hairline)] bg-[var(--canvas-card)] p-5">
             <Segmented
               value={theme}
               onChange={setTheme}
               options={[
-                { value: "light", label: t("settings.theme.light"), icon: <Sun className="h-4 w-4" /> },
-                { value: "dark", label: t("settings.theme.dark"), icon: <Moon className="h-4 w-4" /> },
+                {
+                  value: "light",
+                  label: t("settings.theme.light"),
+                  icon: <Sun className="h-4 w-4" />,
+                },
+                {
+                  value: "dark",
+                  label: t("settings.theme.dark"),
+                  icon: <Moon className="h-4 w-4" />,
+                },
               ]}
             />
           </div>

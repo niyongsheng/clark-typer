@@ -17,7 +17,7 @@ export function PagePlaceholder({
       <div className="page-body flex items-center justify-center">
         <div className="flex flex-col items-center gap-3 text-center">
           <Icon className="h-8 w-8 text-[var(--ink-tertiary)]" />
-          <div className="text-[13px] text-[var(--ink-tertiary)]">{description}</div>
+          <div className="text-[14px] text-[var(--ink-tertiary)]">{description}</div>
         </div>
       </div>
     </div>

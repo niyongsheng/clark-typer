@@ -14,9 +14,12 @@ export function Titlebar() {
   const spinTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { t } = useI18n();
 
-  useEffect(() => () => {
-    if (spinTimer.current) clearTimeout(spinTimer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (spinTimer.current) clearTimeout(spinTimer.current);
+    },
+    [],
+  );
 
   const handleRefresh = () => {
     void queryClient.invalidateQueries();
@@ -26,12 +29,16 @@ export function Titlebar() {
   };
 
   return (
-    <div className="flex h-[var(--titlebar-h)] shrink-0 select-none items-center gap-3 border-b border-[var(--hairline)] bg-[var(--canvas-soft)] px-4">
-      <span className="cursor-pointer font-display text-[13px] uppercase tracking-[0.04em] text-[var(--ink-tertiary)]">
-        clark-typer
+    <div className="flex h-[var(--titlebar-h)] shrink-0 select-none items-center gap-3 border-b border-[var(--hairline)] bg-[var(--canvas-soft)] px-3 sm:px-5">
+      <span className="flex shrink-0 items-center gap-2 whitespace-nowrap">
+        <span className="h-2 w-2 rounded-none bg-[var(--accent)] shadow-[0_0_8px_var(--crt-glow)]" />
+        <span className="terminal-wordmark cursor-pointer">
+          <span className="text-[var(--accent)]">&gt;</span> clark-typer
+        </span>
+        <span className="terminal-cursor" aria-hidden="true" />
       </span>
-      <span className="h-[18px] w-px bg-[var(--hairline)]" />
-      <span className="text-[13px] text-[var(--ink-secondary)]">
+      <span className="hidden h-[18px] w-px bg-[var(--hairline)] sm:block" />
+      <span className="hidden min-w-0 truncate text-[14px] text-[var(--ink-secondary)] sm:inline">
         {content?.book.title || t("titlebar.fallback")}
       </span>
       <button

@@ -12,11 +12,13 @@ export function Relations() {
       <div className="page-header">
         <h2>关系</h2>
       </div>
-      <div className="page-body space-y-6">
+      <div className="page-body space-y-8">
         <CharacterGraph content={content} />
         <section>
           <div className="dash-card-title">关系矩阵</div>
-          <div className="max-w-4xl">{relationsRaw ? <Markdown>{relationsRaw}</Markdown> : null}</div>
+          <div className="max-w-4xl">
+            {relationsRaw ? <Markdown>{relationsRaw}</Markdown> : null}
+          </div>
         </section>
       </div>
     </div>

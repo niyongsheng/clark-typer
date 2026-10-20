@@ -1,4 +1,4 @@
-import type { ChapterStatus, Relation } from "@clark-typer/content";
+import type { ChapterStatus, Relation, ScienceTier } from "@clark-typer/content";
 
 export const STATUS_LABEL: Record<ChapterStatus, string> = {
   pending: "待写",
@@ -12,6 +12,13 @@ export const STATUS_COLOR: Record<ChapterStatus, string> = {
   written: "var(--info)",
   reviewed: "var(--warning)",
   edited: "var(--success)",
+};
+
+// 科学三层标注统一映射到语义色 token，避免页面各自硬编码
+export const SCIENCE_TIER_COLOR: Record<ScienceTier, string> = {
+  known: "var(--success)",
+  extrapolation: "var(--info)",
+  assumption: "var(--warning)",
 };
 
 export interface CharacterDegree {

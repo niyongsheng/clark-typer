@@ -1,15 +1,8 @@
 import type { ContentBundle } from "@clark-typer/content";
-import {
-  Background,
-  Controls,
-  MarkerType,
-  ReactFlow,
-  type Edge,
-  type Node,
-} from "@xyflow/react";
+import { Background, Controls, type Edge, MarkerType, type Node, ReactFlow } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useMemo } from "react";
-import { useSettingsStore, type Theme } from "../stores/useSettingsStore";
+import { type Theme, useSettingsStore } from "../stores/useSettingsStore";
 
 // 主角名（关系图谱中心节点）—— 换项目时在此修改
 const PROTAGONIST = "陆辰";
@@ -19,6 +12,7 @@ const shorten = (s: string, n: number) => (s.length > n ? `${s.slice(0, n)}…` 
 interface Palette {
   nodeBg: string;
   centerBg: string;
+  centerText: string;
   text: string;
   border: string;
   edgeStroke: string;
@@ -29,24 +23,26 @@ interface Palette {
 
 const PALETTES: Record<Theme, Palette> = {
   dark: {
-    nodeBg: "#1c1a17",
-    centerBg: "#2a241b",
-    text: "#ece8dd",
-    border: "#3a3733",
-    edgeStroke: "#423d35",
-    labelFill: "#8a867c",
-    labelBg: "#12100e",
-    grid: "#2a2721",
+    nodeBg: "#0b1a12",
+    centerBg: "#39ff88",
+    centerText: "#04140a",
+    text: "#c8ffd4",
+    border: "#2a5239",
+    edgeStroke: "#2f6b47",
+    labelFill: "#6aa37e",
+    labelBg: "#07110b",
+    grid: "#10241a",
   },
   light: {
-    nodeBg: "#ffffff",
-    centerBg: "#fdeee1",
-    text: "#1d1d1f",
-    border: "#d1d1d6",
-    edgeStroke: "#c7c7cc",
-    labelFill: "#6e6e73",
-    labelBg: "#ffffff",
-    grid: "#d1d1d6",
+    nodeBg: "#f4f9ee",
+    centerBg: "#0f6b3a",
+    centerText: "#f4f9ee",
+    text: "#0b2e17",
+    border: "#b9cdb3",
+    edgeStroke: "#6f9079",
+    labelFill: "#3f6b4b",
+    labelBg: "#e9f1e2",
+    grid: "#cfdcc9",
   },
 };
 
@@ -80,13 +76,20 @@ function buildGraph(content: ContentBundle | undefined, theme: Theme) {
     style: {
       width: 96,
       padding: "6px 8px",
-      fontSize: 12,
+      fontFamily: "var(--font-mono)",
+      fontSize: 11,
       fontWeight: 500,
       textAlign: "center",
       background: p.name === PROTAGONIST ? pal.centerBg : pal.nodeBg,
-      color: pal.text,
-      border: `1px solid ${p.name === PROTAGONIST ? "var(--accent-gold)" : pal.border}`,
-      borderRadius: 8,
+      color: p.name === PROTAGONIST ? pal.centerText : pal.text,
+      border: `1px solid ${p.name === PROTAGONIST ? "var(--accent)" : pal.border}`,
+      borderRadius: 0,
+      boxShadow:
+        p.name === PROTAGONIST
+          ? theme === "dark"
+            ? "0 0 12px rgba(57,255,136,0.35)"
+            : "0 0 10px rgba(15,107,58,0.15)"
+          : undefined,
     },
   }));
 
@@ -95,10 +98,10 @@ function buildGraph(content: ContentBundle | undefined, theme: Theme) {
     source: r.from,
     target: r.to,
     label: shorten(r.label, 8),
-    labelStyle: { fill: pal.labelFill, fontSize: 10 },
+    labelStyle: { fill: pal.labelFill, fontSize: 10, fontFamily: "var(--font-mono)" },
     labelBgStyle: { fill: pal.labelBg },
     labelBgPadding: [3, 2] as [number, number],
-    labelBgBorderRadius: 4,
+    labelBgBorderRadius: 0,
     style: { stroke: pal.edgeStroke },
     markerEnd: { type: MarkerType.ArrowClosed, color: pal.edgeStroke, width: 14, height: 14 },
   }));
@@ -112,11 +115,15 @@ export function CharacterGraph({ content }: { content?: ContentBundle }) {
   const { nodes, edges } = useMemo(() => buildGraph(content, theme), [content, theme]);
 
   if (nodes.length === 0) {
-    return <div className="text-[13px] text-[var(--ink-tertiary)]">暂无关系数据（0-角色档案/关系图谱.md）</div>;
+    return (
+      <div className="text-[14px] text-[var(--ink-tertiary)]">
+        暂无关系数据（0-角色档案/关系图谱.md）
+      </div>
+    );
   }
 
   return (
-    <div className="h-[560px] w-full overflow-hidden rounded-lg border border-[var(--hairline)] bg-[var(--canvas)]">
+    <div className="h-[560px] w-full overflow-hidden rounded-none border border-[var(--hairline)] bg-[var(--canvas)]">
       <ReactFlow
         nodes={nodes}
         edges={edges}

@@ -21,7 +21,7 @@ export function Export() {
 
   const { data: preview, isFetching } = useQuery({
     queryKey: ["release-file", selected?.path],
-    queryFn: () => fetchFile(selected!.path),
+    queryFn: () => fetchFile(selected?.path ?? ""),
     enabled: !!previewable,
   });
 
@@ -32,9 +32,11 @@ export function Export() {
       </div>
 
       {isLoading ? (
-        <div className="p-6 text-[var(--ink-tertiary)]">加载中…</div>
+        <div className="p-6 text-[14px] text-[var(--ink-tertiary)]">加载中…</div>
       ) : isError ? (
-        <div className="p-6 text-[var(--error)]">打包文件加载失败（仅开发模式可用）</div>
+        <div className="p-6 text-[14px] text-[var(--error)]">
+          打包文件加载失败（仅开发模式可用）
+        </div>
       ) : files.length === 0 ? (
         <EmptyState
           title="暂无打包文件"
@@ -49,10 +51,11 @@ export function Export() {
                   key={f.path}
                   type="button"
                   onClick={() => setSelected(f)}
-                  className={`flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-[13px] ${selected?.path === f.path
-                    ? "bg-[var(--accent-gold-soft-bg)] text-[var(--accent-gold)]"
-                    : "text-[var(--ink-secondary)] hover:bg-[var(--canvas-mid)]"
-                    }`}
+                  className={`flex w-full items-center gap-2 rounded-none px-2.5 py-2 text-left text-[14px] ${
+                    selected?.path === f.path
+                      ? "bg-[var(--accent-soft-bg)] text-[var(--accent-text)] shadow-[inset_2px_0_0_var(--accent)]"
+                      : "text-[var(--ink-secondary)] hover:bg-[var(--canvas-pop)]"
+                  }`}
                 >
                   {isText(f.name) ? (
                     <FileText className="h-4 w-4 shrink-0" />
@@ -67,11 +70,11 @@ export function Export() {
 
           <section className="flex min-w-0 flex-1 flex-col">
             {!selected ? (
-              <div className="flex flex-1 items-center justify-center text-[13px] text-[var(--ink-mute)]">
+              <div className="flex flex-1 items-center justify-center text-[14px] text-[var(--ink-mute)]">
                 选择左侧文件进行预览
               </div>
             ) : !previewable ? (
-              <div className="flex flex-1 items-center justify-center text-[13px] text-[var(--ink-mute)]">
+              <div className="flex flex-1 items-center justify-center text-[14px] text-[var(--ink-mute)]">
                 二进制文件暂不支持在线预览
               </div>
             ) : (
@@ -86,7 +89,7 @@ export function Export() {
                     {selected.name.endsWith(".md") ? (
                       <Markdown>{preview?.content ?? ""}</Markdown>
                     ) : (
-                      <pre className="whitespace-pre-wrap font-editor text-[15px] leading-7 text-[var(--ink)]">
+                      <pre className="whitespace-pre-wrap font-editor text-[16px] leading-8 text-[var(--ink)]">
                         {preview?.content ?? ""}
                       </pre>
                     )}

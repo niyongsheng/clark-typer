@@ -13,8 +13,12 @@ export function World() {
       </div>
       <div className="page-body">
         <div className="mx-auto max-w-3xl">
-          {worldRaw ? <Markdown>{worldRaw}</Markdown> : (
-            <div className="text-[13px] text-[var(--ink-tertiary)]">暂无世界观设定（2-世界观设定/世界观.md）</div>
+          {worldRaw ? (
+            <Markdown>{worldRaw}</Markdown>
+          ) : (
+            <div className="text-[14px] text-[var(--ink-tertiary)]">
+              暂无世界观设定（2-世界观设定/世界观.md）
+            </div>
           )}
         </div>
       </div>

@@ -15,10 +15,10 @@ export function FileEditPage() {
   });
 
   if (isLoading) {
-    return <div className="p-6 text-[var(--ink-tertiary)]">加载中…</div>;
+    return <div className="p-6 text-[14px] text-[var(--ink-tertiary)]">加载中…</div>;
   }
   if (isError || !data) {
-    return <div className="p-6 text-[var(--ink-tertiary)]">未找到文件：{path}</div>;
+    return <div className="p-6 text-[14px] text-[var(--ink-tertiary)]">未找到文件：{path}</div>;
   }
 
   return <FileEditor key={path} path={data.path} initialContent={data.content} />;
@@ -49,20 +49,30 @@ function FileEditor({ path, initialContent }: { path: string; initialContent: st
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center gap-3 border-b border-[var(--hairline)] px-4 py-2.5">
-        <div className="min-w-0 flex-1 truncate font-mono text-[13px] text-[var(--ink-tertiary)]">{path}</div>
+        <div className="min-w-0 flex-1 truncate font-mono text-[12px] text-[var(--ink-tertiary)]">
+          {path}
+        </div>
         <div className="flex shrink-0 items-center gap-2">
           {isMarkdown && (
-            <div className="flex overflow-hidden rounded-md border border-[var(--hairline)] text-[13px]">
+            <div className="flex overflow-hidden rounded-none border border-[var(--hairline)] text-[14px]">
               <button
                 type="button"
-                className={mode === "edit" ? "bg-[var(--canvas-elevated)] px-3 py-1.5 text-[var(--ink)]" : "px-3 py-1.5 text-[var(--ink-tertiary)]"}
+                className={
+                  mode === "edit"
+                    ? "bg-[var(--accent-soft-bg)] px-3 py-1.5 text-[var(--accent-text)]"
+                    : "px-3 py-1.5 text-[var(--ink-mute)] hover:text-[var(--ink)]"
+                }
                 onClick={() => setMode("edit")}
               >
                 编辑
               </button>
               <button
                 type="button"
-                className={mode === "preview" ? "bg-[var(--canvas-elevated)] px-3 py-1.5 text-[var(--ink)]" : "px-3 py-1.5 text-[var(--ink-tertiary)]"}
+                className={
+                  mode === "preview"
+                    ? "bg-[var(--accent-soft-bg)] px-3 py-1.5 text-[var(--accent-text)]"
+                    : "px-3 py-1.5 text-[var(--ink-mute)] hover:text-[var(--ink)]"
+                }
                 onClick={() => setMode("preview")}
               >
                 预览
@@ -71,7 +81,7 @@ function FileEditor({ path, initialContent }: { path: string; initialContent: st
           )}
           <button
             type="button"
-            className="btn-primary h-8 px-4 text-[13px]"
+            className="btn-primary"
             disabled={save.isPending}
             onClick={() => save.mutate()}
           >
@@ -85,7 +95,7 @@ function FileEditor({ path, initialContent }: { path: string; initialContent: st
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="flex-1 resize-none bg-[var(--canvas)] p-4 font-mono text-[13px] leading-6 text-[var(--ink)] outline-none"
+          className="flex-1 resize-none bg-[var(--canvas)] p-4 font-editor text-[15px] leading-8 text-[var(--ink)] outline-none"
           spellCheck={false}
         />
       ) : (
